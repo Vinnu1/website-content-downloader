@@ -2,6 +2,7 @@
 python script to download websites
 
 ### As of now
-script is not working properly
-bad code 
-main file not uploaded
+not completed;  
+shows unique webpages links in a website;    
+Fix /
+bad code;  
