@@ -35,6 +35,9 @@ def get_page(my_url,dict_list):
         #print (url,"is relative.")
         #print ("Converting into absolute:",my_url + "/" + url)
 
+        if(url[-1:] == "/"):
+            print("/ at end:",url)
+            url = url[:-1]     
         if(url in dict_list):
             continue
         else:
