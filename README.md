@@ -1,8 +1,7 @@
 # website-downloader
-python script to download websites
+python script to download static websites
 
 ### As of now
 not completed;  
-shows unique webpages links in a website;    
-Fix /
-bad code;  
+downloads html pages;
+bad code / optimization left;  
