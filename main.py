@@ -1,22 +1,35 @@
 import urllib.request
 import re
 from bs4 import BeautifulSoup
+import os
 base_url = str(input("Enter homepage(with https/http):"))
 base_url_regex = r""+re.escape(base_url)+r""
+if(base_url[-1] == "/"):
+    base_name = re.split(r'/',base_url)[-2]
+else:
+    base_name = re.split(r'/',base_url)[-1]
+#creating download directory    
+os.makedirs("downloads",exist_ok=True)
 def get_page(my_url,dict_list):
     print("This url:",my_url)
-    #print("Inside func:",dict_list)
     try:
         html = urllib.request.urlopen(my_url)
     except urllib.error.URLError as e:
         print("Error", e.reason)
         return
     html_page = BeautifulSoup(html,"html.parser")
-    #page_content = html_page.find('html') #+ "\n"
+    #naming files
+    file_name = re.split(r'/',my_url)[-1]
+    if(file_name == "" or file_name == base_name):
+        file_name = "home.html"
+    #downloading files
+    file = open("downloads/"+file_name,"w+")
+    file.write(str(html_page))
+    file.close()
     all_links = html_page.find_all('a')
     for links in all_links:
-        url = links.get('href')
-        if(url.find('#') > - 1): #re.match(r'#',url,re.M
+        url = links.get('href') # added str
+        if(url.find('#')> -1): #re.match(r'#',url,re.M
             print("A comment found:",url) #REMOVE ID #
             continue
         if(not re.match( r'https:' or 'http:', url, re.M)):
@@ -53,4 +66,5 @@ for urls in distinct_list:
     this_list = get_page(urls, distinct_list) 
     distinct_list = {**distinct_list, **this_list}
 print("Total loops:",count)
-print(distinct_list)
+#print(distinct_list)
+print(len(distinct_list))
