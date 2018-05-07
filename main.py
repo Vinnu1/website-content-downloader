@@ -24,7 +24,8 @@ def get_page(my_url,dict_list):
         file_name = "home.html"
     #downloading files
     file = open("downloads/"+file_name,"w+")
-    file.write(str(html_page))
+    #html_body = html_page.find('body')
+    file.write(str(html_page.text))
     file.close()
     all_links = html_page.find_all('a')
     for links in all_links:
