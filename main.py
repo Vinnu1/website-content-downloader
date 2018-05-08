@@ -1,6 +1,7 @@
 import urllib.request
 import re
 from bs4 import BeautifulSoup
+from bs4.element import Comment
 import os
 base_url = str(input("Enter homepage(with https/http):"))
 base_url_regex = r""+re.escape(base_url)+r""
@@ -10,6 +11,21 @@ else:
     base_name = re.split(r'/',base_url)[-1]
 #creating download directory    
 os.makedirs("downloads",exist_ok=True)
+
+def tag_visible(element):
+    if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
+        return False
+    if isinstance(element, Comment):
+        return False
+    return True
+
+
+def text_from_html(soup):
+    texts = soup.findAll(text=True) #.get_text()   
+    visible_texts = filter(tag_visible, texts)  
+    return u"\n".join(t.strip() for t in visible_texts)
+    #return texts
+
 def get_page(my_url,dict_list):
     print("This url:",my_url)
     try:
@@ -25,7 +41,7 @@ def get_page(my_url,dict_list):
     #downloading files
     file = open("downloads/"+file_name,"w+")
     #html_body = html_page.find('body')
-    file.write(str(html_page.text))
+    file.write(str(text_from_html(html_page)))
     file.close()
     all_links = html_page.find_all('a')
     for links in all_links:
